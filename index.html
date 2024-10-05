@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+</head>
+<body>
+  <div id="vis"/>
+  <script>
+    const spec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 600,
+  "title": {
+    "text": "Spotify Revenue Over Time",
+    "fontWeight": "bold",
+    "fontSize": 20
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/eugene-xx/FIT3179_Week10_Homework/refs/heads/main/spotify%20revenue.csv"
+  },
+  "params": [
+    {
+      "name": "Target_Revenue",
+      "value": 0.43,
+      "bind": {
+        "input": "range",
+        "min": 0.43,
+        "max": 13.25,
+        "step": 0.01,
+        "name": "Select Target Revenue in € (Billions): "
+      }
+    }
+  ],
+  "transform": [
+    {"filter": "datum['Spotify Revenue in billions (Euros)'] >= Target_Revenue"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "bar", "width": 30, "color": "#756bb1"},
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "nominal",
+          "timeUnit": "year",
+          "title": "Year",
+          "axis": {"titleFontSize": 12}
+        },
+        "y": {
+          "field": "Spotify Revenue in billions (Euros)",
+          "type": "quantitative",
+          "title": "Spotify Revenue (Billions of Euros)",
+          "axis": {"titleFontSize": 12}
+        },
+        "tooltip": [
+          {
+            "field": "Year",
+            "type": "temporal",
+            "title": "Year:",
+            "format": "%Y"
+          },
+          {
+            "field": "Spotify Revenue in billions (Euros)",
+            "type": "quantitative",
+            "title": "Revenue in € (Billions):",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "dx": 0,
+        "dy": -8
+      },
+      "encoding": {
+        "x": {"field": "Year", "type": "nominal", "timeUnit": "year"},
+        "y": {
+          "field": "Spotify Revenue in billions (Euros)",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Spotify Revenue in billions (Euros)",
+          "type": "quantitative",
+          "format": ".2f"
+        }
+      }
+    }
+  ],
+  "config": {}
+};
+    vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
+  </script>
+</body>
+</html>
